@@ -229,22 +229,37 @@ function create(exerpt, type, exerptParentAboutBlock, is_base){
     // exerpt = exerpt.replaceAll(' break', ' <span class="break">break</span>')
 }
 
-// let IS_MINIMIZED = false    // to toggle minimization and maximization
-// let BLOCKS = []             // save block contents during minimization
-// // changes blablabla
-// function minimize(){
-//     if (!IS_MINIMIZED){
-//         for (block of document.getElementsByClassName('loop')){
-//             BLOCKS.push(block.innerText)
-//             block.innerText = '[minimized loop]'
-//         }
-//         IS_MINIMIZED = true
-//         document.getElementById('minbtn').innerText = 'Maximize'
-//     }
-//     else{
-//         for (block of document.getElementsByClassName('loop'))
-//             block.innerText = BLOCKS.shift()
-//         IS_MINIMIZED = false
-//         document.getElementById('minbtn').innerText = 'Minimize'
-//     }
-// }
+let IS_MINIMIZED = false    // to toggle minimization and maximization
+let BLOCKS = []             // save block contents during minimization
+// changes blablabla
+function minimize(){
+    if (!IS_MINIMIZED){
+        for (block of document.getElementsByClassName('def'))
+            for (child of block.children)
+                child.style.display = 'none'
+        
+        IS_MINIMIZED = true
+        document.getElementById('minbtn').innerText = 'Maximize'
+    }
+    else{
+        for (block of document.getElementsByClassName('def'))
+            for (child of block.children){
+                child.style.display = 'grid'
+                reloadCss();
+            }
+
+        IS_MINIMIZED = false
+        document.getElementById('minbtn').innerText = 'Minimize'
+    }
+}
+
+function reloadCss()
+{
+    var links = document.getElementsByTagName("link");
+    for (var cl in links)
+    {
+        var link = links[cl];
+        if (link.rel === "stylesheet")
+            link.href += "";
+    }
+}
