@@ -193,6 +193,29 @@ function glowSpecials(){
     }
 }
 
+function unglowSpecials(){
+    specialLines = document.querySelectorAll('.line')
+    for (let line of specialLines){
+        console.log(line);
+        if (line.innerHTML.includes('<span class="break">break</span>')){
+            line.style.display = 'grid'
+            line.innerHTML = line.innerHTML.replace('<span class="break">break</span>', 'break')
+        }
+        if (line.innerHTML.includes('<span class="return">return</span>')){
+            line.style.display = 'grid'
+            line.innerHTML = line.innerHTML.replace('<span class="return">return</span>', 'return')
+        }
+        if (line.innerHTML.includes('<span class="continue">continue</span>')){
+            line.style.display = 'grid'
+            line.innerHTML = line.innerHTML.replace('<span class="continue">continue</span>', 'continue')
+        }
+        if (line.innerHTML.includes('<span class="yield">yield</span>')){
+            line.style.display = 'grid'
+            line.innerHTML = line.innerHTML.replace('<span class="yield">yield</span>', 'yield')
+        }
+    }
+}
+
 // function glowLoops(){
 //     loopHeaders = document.querySelectorAll('.loop')
 //     for (let line of loopHeaders){
@@ -235,31 +258,37 @@ let BLOCKS = []             // save block contents during minimization
 function minimize(){
     if (!IS_MINIMIZED){
         for (block of document.getElementsByClassName('def'))
-            for (child of block.children)
+            for (child of block.children){
+                if (child.className === 'docstring') continue;
                 child.style.display = 'none'
+            }
         
         IS_MINIMIZED = true
         document.getElementById('minbtn').innerText = 'Maximize'
     }
     else{
+        unglowSpecials()
         for (block of document.getElementsByClassName('def'))
             for (child of block.children){
+                if (child.className === 'docstring') continue;
                 child.style.display = 'grid'
-                reloadCss();
             }
+        glowSpecials()
+        // for (hl_block of document.getElementsByClassName('break return continue yield'))
+        //     hl_block.parentElement.style.display = 'inline-block'
 
         IS_MINIMIZED = false
         document.getElementById('minbtn').innerText = 'Minimize'
     }
 }
 
-function reloadCss()
-{
-    var links = document.getElementsByTagName("link");
-    for (var cl in links)
-    {
-        var link = links[cl];
-        if (link.rel === "stylesheet")
-            link.href += "";
-    }
-}
+// function reloadCss()
+// {
+//     var links = document.getElementsByTagName("link");
+//     for (var cl in links)
+//     {
+//         var link = links[cl];
+//         if (link.rel === "stylesheet")
+//             link.href += "";
+//     }
+// }
